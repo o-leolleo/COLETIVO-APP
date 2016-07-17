@@ -4,7 +4,8 @@ angular.module('starter.controllers', [])
     var mqtt_status = localStorage.getItem("mqtt_status");
     console.log("Verifying User Session...");
     console.log('Going to login:');
-    Chats.connect();
+	session = Chats.connect();
+	session.connect();
     /*Chats.connect('test.mosquitto.org', 80);*/
 })
 
