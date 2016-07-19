@@ -1,18 +1,14 @@
 <ion-view view-title="Accounts">
   <ion-content>
-    <ion-list>
-        <label class="item item-input">
-            <span class="input-label">Tópico:</span>
-            <input type="text" name="code" ng-model="new.code" required>
-        </label>
-        <label class="item item-input">
-            <span class="input-label">Reiniciar a cada:</span>
-            <input type="number" name="time" ng-model="new.time" required>
-        </label>
-        <button class="button button-block button-positive" ng-click="init(new)">
-            Criar
-        </button>
+  <button class = "button button-block button-positive" ng-click = "showPopup()">Criar Topico</button>
+  <ion-list>
+        <ion-item ng-repeat="item in data">
+            Votação: {{item}}
+            <ion-option-button class="button-info"
+                       ng-click="edit(item)">
+            Edit
+            </ion-option-button>
+        </ion-item>
     </ion-list>
-    <tt>user = {{new}}</tt><br/>
   </ion-content>
 </ion-view>
