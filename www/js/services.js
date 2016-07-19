@@ -58,4 +58,49 @@ angular.module('starter.services', [])
     };
     */
     
+})
+
+.factory('Chats', function($rootScope) {
+	// armazena vetor de canais inscritos
+	var channels = []; 
+
+	return {
+		all: function() {
+			return channels; 
+		}, 
+
+		letMeIn: function(name) {
+			channels.push({
+				name:  name,
+				options: []		
+			});
+		},
+
+		addOptions: function(votacao, options) {
+			for (var i = 0; i < channels.length; ++i)
+				if (channels[i].name === votacao) {
+					channels[i].options = options;
+					return true;
+				} else {
+					return false;
+				}
+		},
+
+		remove: function(votacao) {
+			console.log(votacao);
+
+			for (var i = 0; i < channels.length; ++i) {
+				if (channels[i].name == votacao) {
+					$rootScope.mqtt_client.unsubscribe(votacao);
+					delete channels[i];
+					console.log("unsubscribe em Coletivo_" + votacao);
+					return true;
+				}
+				console.log(channels[i].name);
+			}
+				
+			console.log("sem sucesso");
+			return false;
+		}
+	};
 });
