@@ -27,18 +27,21 @@ angular.module('starter.controllers')
                         //don't allow the user to close unless he enters model...
                            e.preventDefault();
                      } else {
+                        console.log("/Coletivo_"+$scope.data.code);
+                        $scope.mqtt_client.subscribe("/Coletivo_"+$scope.data.code);
+                        $scope.data.push("/Coletivo_"+$scope.data.code);
                         return $scope.data.code;
                      }
                   }
             }
          ]
       });
-
+        
+      /*
       myPopup.then(function(res) {
-         console.log("/Coletivo_"+res);
-         $scope.mqtt_client.subscribe("/Coletivo_"+res);
-         $scope.data.push("/Coletivo_"+res);
-      });    
+         
+      });
+        */
    };
     
     $scope.edit = function(item) {
