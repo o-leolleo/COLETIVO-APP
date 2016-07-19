@@ -1,8 +1,15 @@
 angular.module('starter.services', [])
 
-.factory('Chats', function($rootScope) {
+.factory('Dash', function($rootScope) {
     var service = {};
     var client = {};
+
+    /*
+    service.subscribe = function(config)
+    {
+        console.log("Init:" + config.time + config.code);
+        client.subscribe('/'+config.code, {qos: 1});
+    };
     
     service.connect = function() {
         var wsbroker = "broker.hivemq.com";  //mqtt websocket enabled brokers
@@ -28,12 +35,12 @@ angular.module('starter.services', [])
                 console.log("mqtt connected");
                 
                 // Connection succeeded; subscribe to our topic, you can add multile lines of these
-                client.subscribe('/Coletivo', {qos: 1});
+                //client.subscribe('/Coletivo', {qos: 1});
 
                 //use the below if you want to publish to a topic on connect
                 /*message = new Paho.MQTT.Message("Hello");
                 message.destinationName = "/World";
-                client.send(message);*/
+                client.send(message);
             },
 
             onFailure: function (message) {
@@ -49,5 +56,6 @@ angular.module('starter.services', [])
             return service;
         }
     };
+    */
     
 });

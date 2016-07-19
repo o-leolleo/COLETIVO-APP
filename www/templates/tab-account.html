@@ -1,9 +1,18 @@
 <ion-view view-title="Accounts">
   <ion-content>
     <ion-list>
-        <ion-toggle ng-model="settings.connectButton" ng-change="clicked()" toggle-class="toggle-poi">
-            Conectado
-        </ion-toggle>
+        <label class="item item-input">
+            <span class="input-label">Tópico:</span>
+            <input type="text" name="code" ng-model="new.code" required>
+        </label>
+        <label class="item item-input">
+            <span class="input-label">Reiniciar a cada:</span>
+            <input type="number" name="time" ng-model="new.time" required>
+        </label>
+        <button class="button button-block button-positive" ng-click="init(new)">
+            Criar
+        </button>
     </ion-list>
+    <tt>user = {{new}}</tt><br/>
   </ion-content>
 </ion-view>
