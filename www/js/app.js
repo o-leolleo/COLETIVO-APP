@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -21,6 +21,37 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             StatusBar.styleDefault();
         }
     });
+
+    //==========================================================================
+    // Create a client instance
+    $rootScope.mqtt_client = new Paho.MQTT.Client("broker.mqttdashboard.com", 8000, 
+                                                  "myclientid_" + parseInt(Math.random() * 100, 10));
+    
+    // set callback handlers
+    $rootScope.mqtt_client.onConnectionLost = onConnectionLost;
+    $rootScope.mqtt_client.onMessageArrived = onMessageArrived;
+
+    // connect the client
+    $rootScope.mqtt_client.connect({onSuccess:onConnect});
+    
+    // called when the client connects
+    function onConnect() {
+        // Once a connection has been made, make a subscription and send a message.
+        console.log("onConnect");
+        $rootScope.mqtt_client.subscribe("/Coletivo");
+    }
+
+    // called when the client loses its connection
+    function onConnectionLost(responseObject) {
+        if (responseObject.errorCode !== 0) {
+            console.log("onConnectionLost:"+responseObject.errorMessage);
+        }
+    }
+
+    // called when a message arrives
+    function onMessageArrived(message) {
+        console.log("onMessageArrived:"+message.payloadString);
+    }
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
