@@ -6,9 +6,12 @@
 -->
 <ion-view view-title="{{chat.name}}">
   <ion-content class="padding">
-    <img ng-src="{{chat.face}}" style="width: 64px; height: 64px">
-    <p>
-      {{chat.lastText}}
-    </p>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="option in chat.options" type="item-text-wrap">
+				<button class="button button-block button-positive" ng-click="vote(option)">
+					{{ option }}
+				</button>	
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>

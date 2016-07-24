@@ -60,7 +60,7 @@ angular.module('starter.services', [])
     
 })
 
-.factory('Chats', function($rootScope) {
+.factory('Voting', function($rootScope) {
 	// armazena vetor de canais inscritos
 	var channels = []; 
 
@@ -69,9 +69,10 @@ angular.module('starter.services', [])
 			return channels; 
 		}, 
 
-		letMeIn: function(name) {
+		add: function(name) {
 			channels.push({
-				name:  name,
+				name: name,
+				vote: true,
 				options: []		
 			});
 		},
@@ -79,7 +80,8 @@ angular.module('starter.services', [])
 		addOptions: function(votacao, options) {
 			for (var i = 0; i < channels.length; ++i)
 				if (channels[i].name === votacao) {
-					channels[i].options = options;
+					console.log("adding options: " + options);
+					channels[i].options = options.split("#");
 					return true;
 				} else {
 					return false;
@@ -101,6 +103,15 @@ angular.module('starter.services', [])
 				
 			console.log("sem sucesso");
 			return false;
+		},
+
+		get: function (votacao) {
+			for (var i = 0; i < channels.length; ++i) {
+				if (channels[i].name === votacao)
+					return channels[i];
+			}
+
+			return null;
 		}
 	};
 });

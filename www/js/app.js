@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-.run(function($ionicPlatform, $rootScope) {
+.run(function($ionicPlatform, $rootScope, Voting) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -51,6 +51,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     // called when a message arrives
     function onMessageArrived(message) {
         console.log("onMessageArrived:"+message.payloadString);
+		message = message.payloadString.split(":");
+
+		if (message[0] === "v") {
+			if (message[1] === "opt") {
+				Voting.addOptions(message[2], message[3]);
+			}
+		}
     }
 })
 
