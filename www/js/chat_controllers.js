@@ -48,7 +48,7 @@ angular.module('starter.controllers')
   
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Voting) {
+.controller('ChatDetailCtrl', function($scope, $stateParams, $ionicPopup, Voting) {
 	$scope.chat = Voting.get($stateParams.chatId);
 
 	$scope.vote = function (option) {
@@ -59,4 +59,16 @@ angular.module('starter.controllers')
 			$scope.chat.vote = false;
 		}
 	}
+
+	$scope.showConfirm = function(option) {
+	   var confirmPopup = $ionicPopup.confirm({
+		 title: option,
+		 template: 'tem certeza de que deseja votar nessa opção?'
+	   });
+
+	   confirmPopup.then(function(res) {
+		 if(res)
+			 $scope.vote(option);
+	   });
+	 };
 });
