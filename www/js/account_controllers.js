@@ -12,7 +12,10 @@ angular.module('starter.controllers')
       
       // Custom popup
       var myPopup = $ionicPopup.show({
-         template: '<input type = "text" name="code" ng-model = "data.code">',
+         template:  'Ambiente:'+
+                    '<input type = "text" name="code" ng-model = "data.code">'+
+                    'Pergunta:'+
+                    '<input type = "text" name="desc" ng-model = "data.desc">',
          title: 'Topico',
          subTitle: 'Digite o nome do ambiente:',
          scope: $scope,
@@ -23,13 +26,13 @@ angular.module('starter.controllers')
                type: 'button-positive',
                   onTap: function(e) {
 						
-                     if (!$scope.data.code) {
+                     if (!$scope.data.code || !$scope.data.desc) {
                         //don't allow the user to close unless he enters model...
                            e.preventDefault();
                      } else {
                         console.log("/Coletivo_"+$scope.data.code);
                         $scope.mqtt_client.subscribe("/Coletivo_"+$scope.data.code);
-                        $scope.data.push("/Coletivo_"+$scope.data.code);
+                        $scope.data.push("v:opt:"+$scope.data.code+":sim#nao:"+$scope.data.desc);
                         return $scope.data.code;
                      }
                   }
