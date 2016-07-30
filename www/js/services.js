@@ -94,10 +94,10 @@ angular.module('starter.services', [])
 			console.log(votacao);
 
 			for (var i = 0; i < channels.length; ++i) {
-				if (channels[i].name == votacao) {
+				if (channels[i].name === votacao) {
 					$rootScope.mqtt_client.unsubscribe(votacao);
-					delete channels[i];
-					console.log("unsubscribe em Coletivo_" + votacao);
+					channels.splice(i, 1);
+					console.log("unsubscribe in Coletivo_" + votacao);
 					return true;
 				}
 				console.log(channels[i].name);

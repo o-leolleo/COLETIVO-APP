@@ -12,6 +12,10 @@ angular.module('starter.controllers')
 	$scope.data   = [];
 	$scope.chats  = Voting.all();
 
+	$scope.remove = function (channel) {
+		Voting.remove(channel);
+	}
+
    $scope.showPopup = function() {
       
       // Custom popup
