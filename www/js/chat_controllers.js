@@ -6,12 +6,11 @@ angular.module('starter.controllers')
   // To listen for when this page is active (for example, to refresh data),
   // listen for the $ionicView.enter event:
   //
-  //$scope.$on('$ionicView.enter', function(e) {
   //});
 
-	$scope.code = [];
-	$scope.data = [];
-	$scope.chats = Voting.all();
+	$scope.code   = [];
+	$scope.data   = [];
+	$scope.chats  = Voting.all();
 
    $scope.showPopup = function() {
       
@@ -32,20 +31,26 @@ angular.module('starter.controllers')
                         //don't allow the user to close unless he enters model...
                            e.preventDefault();
                      } else {
-                        return $scope.data.code;
+						 var res = $scope.data.code;
+						 
+						 // se inscreve na votação
+						 console.log("/Coletivo_"+res);
+						 $scope.mqtt_client.subscribe("/Coletivo_"+res);
+						 Voting.add(res);
+
+						 // avisa ao mestre
+						 message = new Paho.MQTT.Message("p:new_v:" + res);
+						 console.log(message.payloadString);
+						 message.destinationName = "Coletivo_" + res;
+						 $scope.mqtt_client.send(message);
+
+                     	 return $scope.data.code;
                      }
                   }
             }
          ]
       });
-
-      myPopup.then(function(res) {
-         console.log("/Coletivo_"+res);
-         $scope.mqtt_client.subscribe("/Coletivo_"+res);
-         Voting.add(res);
-      });    
    };
-  
 })
 
 .controller('ChatDetailCtrl', function($scope, $stateParams, $ionicPopup, Voting) {
@@ -57,6 +62,7 @@ angular.module('starter.controllers')
 			message.destinationName = "/Coletivo_" + $scope.chat.name;
 			$scope.mqtt_client.send(message);	
 			$scope.chat.vote = false;
+			console.log("votou!");
 		}
 	}
 

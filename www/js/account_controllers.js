@@ -39,12 +39,6 @@ angular.module('starter.controllers')
             }
          ]
       });
-        
-      /*
-      myPopup.then(function(res) {
-         
-      });
-        */
    };
     
     $scope.edit = function(item) {

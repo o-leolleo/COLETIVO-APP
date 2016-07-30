@@ -73,15 +73,17 @@ angular.module('starter.services', [])
 			channels.push({
 				name: name,
 				vote: true,
-				options: []		
+				options: [],
+				schedule: ""
 			});
 		},
 
-		addOptions: function(votacao, options) {
+		addOptions: function(votacao, options, desc) {
 			for (var i = 0; i < channels.length; ++i)
-				if (channels[i].name === votacao) {
+				if (channels[i].name === votacao && channels[i].options.length === 0) {
 					console.log("adding options: " + options);
 					channels[i].options = options.split("#");
+					channels[i].schedule = desc;
 					return true;
 				} else {
 					return false;

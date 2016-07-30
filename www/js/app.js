@@ -24,7 +24,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
     //==========================================================================
     // Create a client instance
-    $rootScope.mqtt_client = new Paho.MQTT.Client("test.mosquitto.org", 8080, 
+    $rootScope.mqtt_client = new Paho.MQTT.Client("broker.mqttdashboard.com", 8000, 
                                                   "myclientid_" + parseInt(Math.random() * 100, 10));
     
     // set callback handlers
@@ -55,8 +55,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
 		if (message[0] === "v") {
 			if (message[1] === "opt") {
-                                                /* votacao,  options */
-				Voting.addOptions(message[2], message[3]);
+								  /* votacao,    options, description*/
+				Voting.addOptions(message[2], message[3], message[4]);
 			}
 		}
     }
