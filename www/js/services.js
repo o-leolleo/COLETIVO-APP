@@ -12,7 +12,7 @@ angular.module('starter.services', [])
 		add: function(name) {
 			channels.push({
 				name: name,
-				vote: true,
+				state: "subscribed",
 				options: [],
 				schedule: ""
 			});
@@ -20,7 +20,7 @@ angular.module('starter.services', [])
 
 		addOptions: function(votacao, options, desc) {
 			for (var i = 0; i < channels.length; ++i)
-				if (channels[i].name === votacao && channels[i].options.length === 0) {
+				if (channels[i].name === votacao) {
 					console.log("adding options: " + options);
 					channels[i].options = options.split("#");
 					channels[i].schedule = desc;
@@ -35,11 +35,11 @@ angular.module('starter.services', [])
 
 			for (var i = 0; i < channels.length; ++i) {
 				if (channels[i].name === votacao) {
-					$rootScope.mqtt_client.unsubscribe(votacao);
 					channels.splice(i, 1);
 					console.log("unsubscribe in Coletivo_" + votacao);
 					return true;
 				}
+
 				console.log(channels[i].name);
 			}
 				
@@ -54,6 +54,18 @@ angular.module('starter.services', [])
 			}
 
 			return null;
+		},
+
+		nextState: function (channel) {
+			var toEval = this.get(channel);
+
+			switch(toEval.state) {
+			case "subscribed": toEval.state = "waiting"; break;
+			case    "waiting": toEval.state =  "voting"; break;
+			case     "voting": toEval.state =   "voted"; break;
+			case      "voted": toEval.state ="finished"; break;
+			case   "finished": toEval.state = "waiting"; break;
+			}
 		}
 	};
 })
@@ -81,9 +93,8 @@ angular.module('starter.services', [])
 					console.log("adding options: " + options);
 					channels[i].schedule = desc;
 
-					for (var opt in options.split("#")) {
+					for (var opt in options.split("#"))
 						channels[i].options[options.split("#")[opt]] = 0;
-					}
 
 					return true;
 				} else {

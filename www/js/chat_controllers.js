@@ -13,6 +13,7 @@ angular.module('starter.controllers')
 	$scope.chats  = Voting.all();
 
 	$scope.remove = function (channel) {
+		$scope.mqtt_client.unsubscribe(votacao);
 		Voting.remove(channel);
 	}
 
@@ -42,11 +43,13 @@ angular.module('starter.controllers')
 						 $scope.mqtt_client.subscribe("/Coletivo_"+res);
 						 Voting.add(res);
 
-						 // avisa ao mestre
+						 // avisa ao juiz 
 						 message = new Paho.MQTT.Message("p:new_v:" + res);
 						 console.log(message.payloadString);
 						 message.destinationName = "/Coletivo_" + res;
 						 $scope.mqtt_client.send(message);
+						 
+						 Voting.nextState(res);
 
                      	 return $scope.data.code;
                      }
@@ -61,11 +64,13 @@ angular.module('starter.controllers')
 	$scope.chat = Voting.get($stateParams.chatId);
 
 	$scope.vote = function (option) {
-		if ($scope.chat.vote === true) {
+		if ($scope.chat.state === "voting") {
 			var message = new Paho.MQTT.Message("p:" + $scope.chat.name + ":" + option);
 			message.destinationName = "/Coletivo_" + $scope.chat.name;
 			$scope.mqtt_client.send(message);	
-			$scope.chat.vote = false;
+
+			Voting.nextState($scope.chat.name); // state = "voted"
+
 			console.log("votou!");
 		}
 	}

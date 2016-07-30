@@ -53,6 +53,23 @@ angular.module('starter.controllers')
 	$scope.channel = Owned.get($stateParams.accountId);
 
 	$scope.nextState = function () {
+		if ($scope.channel.state === "created") {
+			var options = "", f = true;
+
+			for (var opt in $scope.channel.options) {
+				if (f === false)
+					options += "#";
+
+				options += opt;
+				f = false;
+			}
+
+			message = new Paho.MQTT.Message("v:opt:" + $scope.channel.name + ":" + options + ":" +  $scope.channel.schedule);
+			console.log(message.payloadString);
+			message.destinationName = "/Coletivo_" + $scope.channel.name;
+			$scope.mqtt_client.send(message);
+		}
+
 		Owned.nextState($scope.channel.name);
 		console.log($scope.channel.name + " goes to state:" + $scope.channel.state);
 	}
