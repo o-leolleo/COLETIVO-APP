@@ -45,7 +45,7 @@ angular.module('starter.controllers')
 						 // avisa ao mestre
 						 message = new Paho.MQTT.Message("p:new_v:" + res);
 						 console.log(message.payloadString);
-						 message.destinationName = "Coletivo_" + res;
+						 message.destinationName = "/Coletivo_" + res;
 						 $scope.mqtt_client.send(message);
 
                      	 return $scope.data.code;

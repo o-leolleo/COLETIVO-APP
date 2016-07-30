@@ -1,13 +1,12 @@
 angular.module('starter.controllers')
 
-.controller('AccountCtrl', function($scope, $ionicPopup) {
+.controller('AccountCtrl', function($scope, $ionicPopup, Owned) {
 
     $scope.code = [];
-    
     $scope.data = [];
-    //$scope.data.push("Coletivo");
-    
-    // When button is clicked, the popup will be shown...
+	$scope.channels = Owned.all();
+	
+   // When button is clicked, the popup will be shown...
    $scope.showPopup = function() {
       
       // Custom popup
@@ -15,7 +14,9 @@ angular.module('starter.controllers')
          template:  'Ambiente:'+
                     '<input type = "text" name="code" ng-model = "data.code">'+
                     'Pergunta:'+
-                    '<input type = "text" name="desc" ng-model = "data.desc">',
+                    '<input type = "text" name="desc" ng-model = "data.desc">'+
+		  			'Opções:'+
+                    '<input type = "text" name="desc" ng-model = "data.opt">',
          title: 'Topico',
          subTitle: 'Digite o nome do ambiente:',
          scope: $scope,
@@ -30,9 +31,12 @@ angular.module('starter.controllers')
                         //don't allow the user to close unless he enters model...
                            e.preventDefault();
                      } else {
-                        console.log("/Coletivo_"+$scope.data.code);
-                        $scope.mqtt_client.subscribe("/Coletivo_"+$scope.data.code);
-                        $scope.data.push("v:opt:"+$scope.data.code+":sim#nao:"+$scope.data.desc);
+						var res = $scope.data;
+
+                        console.log("/Coletivo_" + res.code);
+                        $scope.mqtt_client.subscribe("/Coletivo_" + res.code);
+						Owned.add(res.code);
+
                         return $scope.data.code;
                      }
                   }
@@ -41,6 +45,7 @@ angular.module('starter.controllers')
       });
    };
     
+   /*
     $scope.edit = function(item) {
         console.log(item);
         message = new Paho.MQTT.Message("fatality");
@@ -48,6 +53,6 @@ angular.module('starter.controllers')
         $scope.mqtt_client.send(message);
         
         $scope.data.splice($scope.data.indexOf(item), 1);
-        
     };
+	*/
 });
