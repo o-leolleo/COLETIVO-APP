@@ -2,7 +2,7 @@
   <ion-content>
   <button class = "button button-block button-positive" ng-click = "showPopup()">Criar Topico</button>
   <ion-list>
-				<ion-item class="item-remove-animate item-icon-right" ng-repeat="item in channels" align="middle" type="item-text-wrap" href="#/tab/chats/{{chat.name}}">
+				<ion-item class="item-remove-animate item-icon-right" ng-repeat="item in channels" align="middle" type="item-text-wrap" href="#/tab/account/{{item.name}}">
             Votação: {{item.name}}
             </ion-option-button>
         </ion-item>

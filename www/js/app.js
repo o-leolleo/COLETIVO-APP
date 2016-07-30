@@ -24,7 +24,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
     //==========================================================================
     // Create a client instance
-    $rootScope.mqtt_client = new Paho.MQTT.Client("broker.mqttdashboard.com", 8000, 
+    $rootScope.mqtt_client = new Paho.MQTT.Client("iot.eclipse.org", 80, 
                                                   "myclientid_" + parseInt(Math.random() * 100, 10));
     
     // set callback handlers

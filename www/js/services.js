@@ -69,18 +69,22 @@ angular.module('starter.services', [])
 		add: function(name) {
 			channels.push({
 				name: name,
-				options: [],
-				state: "created",
-				schedule: ""
+				options: {},
+				schedule: "",
+				state: "created"
 			});
 		},
 
 		addOptions: function(votacao, options, desc) {
 			for (var i = 0; i < channels.length; ++i)
-				if (channels[i].name === votacao && channels[i].options.length === 0) {
+				if (channels[i].name === votacao) {
 					console.log("adding options: " + options);
-					channels[i].options = options.split("#");
 					channels[i].schedule = desc;
+
+					for (var opt in options.split("#")) {
+						channels[i].options[options.split("#")[opt]] = 0;
+					}
+
 					return true;
 				} else {
 					return false;
@@ -108,13 +112,22 @@ angular.module('starter.services', [])
 			return false;
 		},
 
-		get: function (votacao) {
+		get: function (channel) {
 			for (var i = 0; i < channels.length; ++i) {
-				if (channels[i].name === votacao)
+				if (channels[i].name === channel)
 					return channels[i];
 			}
 
 			return null;
+		},
+
+		nextState: function (channel) {
+			var toEval = this.get(channel);
+
+			switch (toEval.state) {
+			case "created": toEval.state =  "started"; break;
+			case "started": toEval.state = "finished"; break;
+			}
 		}
 	};
 });

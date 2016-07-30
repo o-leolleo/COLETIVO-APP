@@ -35,7 +35,10 @@ angular.module('starter.controllers')
 
                         console.log("/Coletivo_" + res.code);
                         $scope.mqtt_client.subscribe("/Coletivo_" + res.code);
+						
+						// cria canal, seta opções e descrição
 						Owned.add(res.code);
+						Owned.addOptions(res.code, res.opt.replace(";", "#"), res.desc);
 
                         return $scope.data.code;
                      }
@@ -44,15 +47,21 @@ angular.module('starter.controllers')
          ]
       });
    };
-    
-   /*
-    $scope.edit = function(item) {
-        console.log(item);
-        message = new Paho.MQTT.Message("fatality");
-        message.destinationName = item;
-        $scope.mqtt_client.send(message);
-        
-        $scope.data.splice($scope.data.indexOf(item), 1);
-    };
-	*/
+})
+
+.controller('AccountDetailCtrl', function($scope, $stateParams, $ionicPopup, Owned) {
+	$scope.channel = Owned.get($stateParams.accountId);
+
+	$scope.nextState = function () {
+		Owned.nextState($scope.channel.name);
+		console.log($scope.channel.name + " goes to state:" + $scope.channel.state);
+	}
+
+	$scope.isActive = function (view) {
+		switch (view) {
+			case 1: return ($scope.channel.state ===  "created") ? "ng-show" : "ng-hide";
+			case 2: return ($scope.channel.state ===  "started") ? "ng-show" : "ng-hide";
+			case 3: return ($scope.channel.state === "finished") ? "ng-show" : "ng-hide";
+		}
+	}
 });
