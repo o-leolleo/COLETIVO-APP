@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-.run(function($ionicPlatform, $rootScope, Voting) {
+.run(function($ionicPlatform, $rootScope, Voting, Owned) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -24,7 +24,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
     //==========================================================================
     // Create a client instance
-    $rootScope.mqtt_client = new Paho.MQTT.Client("iot.eclipse.org", 80, 
+    $rootScope.mqtt_client = new Paho.MQTT.Client("test.mosquitto.org", 8080, 
                                                   "myclientid_" + parseInt(Math.random() * 100, 10));
     
     // set callback handlers
@@ -56,14 +56,38 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 		if (message[0] === "v") {
 			if (message[1] === "opt") {
 				console.log(message[2]);
-				if (Voting.get(message[2]).state === "waiting") {
+				if (Voting.get(message[2]) !== null && Voting.get(message[2]).state === "waiting") {
 								  /* votacao,    options, description*/
 					Voting.addOptions(message[2], message[3], message[4]);
 					Voting.nextState(message[2]); // state = "voting"
 				}
 			}
 		} else if (message[0] === "p") {
+			if (message[1] === "new_v") {
+				var channel = Owned.get(message[2]); 
 
+				if (channel !== null && channel.state === "started") {
+					var options = "", f = true;
+
+					for (var opt in channel.options) {
+						if (f === false)
+							options += "#";
+
+						options += opt;
+						f = false;
+					}
+
+					message = new Paho.MQTT.Message("v:opt:" + channel.name + ":" + options + ":" +  channel.schedule);
+					console.log(message.payloadString);
+					message.destinationName = "/Coletivo_" + channel.name;
+					$rootScope.mqtt_client.send(message);
+				}
+			} else if (message[1] === "vote") {
+				var channel = Owned.get(message[2]);
+
+				if (channel.state === "started")
+					channel.options[message[3]]++;			
+			}
 		}
     }
 })

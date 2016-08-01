@@ -38,7 +38,7 @@ angular.module('starter.controllers')
 						
 						// cria canal, seta opções e descrição
 						Owned.add(res.code);
-						Owned.addOptions(res.code, res.opt.replace(";", "#"), res.desc);
+						Owned.addOptions(res.code, "sim#não", res.desc);
 
                         return $scope.data.code;
                      }

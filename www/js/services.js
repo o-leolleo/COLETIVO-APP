@@ -25,9 +25,9 @@ angular.module('starter.services', [])
 					channels[i].options = options.split("#");
 					channels[i].schedule = desc;
 					return true;
-				} else {
-					return false;
-				}
+				} 
+
+			return false;
 		},
 
 		remove: function(votacao) {
@@ -88,7 +88,7 @@ angular.module('starter.services', [])
 		},
 
 		addOptions: function(votacao, options, desc) {
-			for (var i = 0; i < channels.length; ++i)
+			for (var i = 0; i < channels.length; ++i) {
 				if (channels[i].name === votacao) {
 					console.log("adding options: " + options);
 					channels[i].schedule = desc;
@@ -97,9 +97,10 @@ angular.module('starter.services', [])
 						channels[i].options[options.split("#")[opt]] = 0;
 
 					return true;
-				} else {
-					return false;
-				}
+				} 
+			}
+
+			return false;
 		},
 
 		remove: function(votacao) {

@@ -65,7 +65,7 @@ angular.module('starter.controllers')
 
 	$scope.vote = function (option) {
 		if ($scope.chat.state === "voting") {
-			var message = new Paho.MQTT.Message("p:" + $scope.chat.name + ":" + option);
+			var message = new Paho.MQTT.Message("p:vote:" + $scope.chat.name + ":" + option);
 			message.destinationName = "/Coletivo_" + $scope.chat.name;
 			$scope.mqtt_client.send(message);	
 
