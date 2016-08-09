@@ -106,11 +106,6 @@ angular.module('starter.services', [])
 		remove: function(votacao) {
 			for (var i = 0; i < channels.length; ++i) {
 				if (channels[i].name === votacao) {
-					message = new Paho.MQTT.Message("v:del:" + votacao);
-					message.destinationName = "/Coletivo_" + votacao;
-					$scope.mqtt_client.send(message);
-
-					$rootScope.mqtt_client.unsubscribe(votacao);
 					channels.splice(i, 1);
 					console.log("unsubscribe in Coletivo_" + votacao);
 

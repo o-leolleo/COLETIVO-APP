@@ -15,8 +15,10 @@ angular.module('starter.controllers')
                     '<input type = "text" name="code" ng-model = "data.code">'+
                     'Pergunta:'+
                     '<input type = "text" name="desc" ng-model = "data.desc">'+
-		  			'Opções:'+
-                    '<input type = "text" name="desc" ng-model = "data.opt">',
+		  			'Opções:<br>'+
+                    '1:<input type = "text" name="desc" ng-model = "data.opt1">'+
+                    '2:<input type = "text" name="desc" ng-model = "data.opt2">'+
+                    '3:<input type = "text" name="desc" ng-model = "data.opt3">',
          title: 'Topico',
          subTitle: 'Digite o nome do ambiente:',
          scope: $scope,
@@ -38,7 +40,7 @@ angular.module('starter.controllers')
 						
 						// cria canal, seta opções e descrição
 						Owned.add(res.code);
-						Owned.addOptions(res.code, "sim#não", res.desc);
+						Owned.addOptions(res.code, res.opt1+"#"+res.opt2+"#"+res.opt3, res.desc);
 
                         return $scope.data.code;
                      }
@@ -53,6 +55,17 @@ angular.module('starter.controllers')
 	$scope.channel = Owned.get($stateParams.accountId);
 
 	$scope.nextState = function () {
+                if($scope.channel.state === "started")
+                {
+                    message = new Paho.MQTT.Message("v:del:" + $scope.channel.name);
+                    message.destinationName = "/Coletivo_" + $scope.channel.name;
+                    $scope.mqtt_client.send(message);
+                    $scope.mqtt_client.unsubscribe("/Coletivo_" +$scope.channel.name);
+                    
+                    Owned.remove($scope.channel.name);
+                    //$scope.$ionicGoBack();
+                };
+            
 		if ($scope.channel.state === "created") {
 			var options = "", f = true;
 
@@ -68,10 +81,12 @@ angular.module('starter.controllers')
 			console.log(message.payloadString);
 			message.destinationName = "/Coletivo_" + $scope.channel.name;
 			$scope.mqtt_client.send(message);
-		}
-
-		Owned.nextState($scope.channel.name);
-		console.log($scope.channel.name + " goes to state:" + $scope.channel.state);
+                        
+                        Owned.nextState($scope.channel.name);
+                        console.log($scope.channel.name + " goes to state:" + $scope.channel.state);
+                };
+                
+                
 	}
 
 	$scope.isActive = function (view) {
