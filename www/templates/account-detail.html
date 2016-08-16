@@ -7,10 +7,12 @@
 			</div>
 		</div>
 
+		<!-- state=created: a votação foi criada, porém ainda não começou  -->
 		<button class="button button-block button-positive {{ isActive(1) }}" ng-click="nextState()">
 			Começar
 		</button>
 
+		<!-- state=started: a votação foi criada, porém ainda não começou  -->
 		<ion-list class="{{ isActive(2) }}">
 			<ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="(option, qtd) in channel.options" type="item-text-wrap">
 				{{ option }} : {{ qtd }}
@@ -19,6 +21,27 @@
 		
 		<button class="button button-block button-positive {{ isActive(2) }}" ng-click="nextState()">
 			Finalizar
+		</button>
+
+		<!-- state=finished: a votação terminou e só são exibidos os resultados -->
+		<ion-list class="{{ isActive(3) }}">
+			<div class="card">
+				<div class="item item-divider">
+					Resultado 
+				</div>
+				<div class="item item-text-wrap">
+					<canvas id="doughnut" class="chart chart-doughnut" chart-data="data" chart-labels="labels"></canvas>
+        </div>
+			</div>
+			<!--
+			<ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="(option, qtd) in channel.options" type="item-text-wrap">
+				{{ option }} : {{ qtd }}
+			</ion-item>
+			-->
+    </ion-list>
+
+		<button class="button button-block button-positive {{ isActive(3) }}" ng-click="nextState()" ui-sref="tab.account">
+			Sair
 		</button>
 
   </ion-content>

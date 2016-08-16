@@ -55,17 +55,6 @@ angular.module('starter.controllers')
 	$scope.channel = Owned.get($stateParams.accountId);
 
 	$scope.nextState = function () {
-                if($scope.channel.state === "started")
-                {
-                    message = new Paho.MQTT.Message("v:del:" + $scope.channel.name);
-                    message.destinationName = "/Coletivo_" + $scope.channel.name;
-                    $scope.mqtt_client.send(message);
-                    $scope.mqtt_client.unsubscribe("/Coletivo_" +$scope.channel.name);
-                    
-                    Owned.remove($scope.channel.name);
-                    //$scope.$ionicGoBack();
-                };
-            
 		if ($scope.channel.state === "created") {
 			var options = "", f = true;
 
@@ -82,11 +71,35 @@ angular.module('starter.controllers')
 			message.destinationName = "/Coletivo_" + $scope.channel.name;
 			$scope.mqtt_client.send(message);
                         
-                        Owned.nextState($scope.channel.name);
-                        console.log($scope.channel.name + " goes to state:" + $scope.channel.state);
-                };
-                
-                
+			// vai para 'started'
+			Owned.nextState($scope.channel.name);
+			console.log($scope.channel.name + " goes to state:" + $scope.channel.state);
+
+	   	} else if ($scope.channel.state === "started") {
+
+		//	message = new Paho.MQTT.Message("v:del:" + $scope.channel.name);
+		//	message.destinationName = "/Coletivo_" + $scope.channel.name;
+		//	$scope.mqtt_client.send(message);
+		//	$scope.mqtt_client.unsubscribe("/Coletivo_" +$scope.channel.name);
+			
+			// vai para finished (onde podem ser vistos os resultados)
+			Owned.nextState($scope.channel.name);
+			console.log($scope.channel.name + " goes to state:" + $scope.channel.state);
+
+			$scope.labels = [];
+			$scope.data   = [];
+
+			for (var key in $scope.channel.options) {
+				$scope.labels.push(key);
+				$scope.data.push($scope.channel.options[key]);
+			}
+
+			console.log($scope.labels);
+			console.log($scope.data);
+			//$scope.$ionicGoBack();
+		} else if ($scope.channel.state === "finished") {
+			Owned.remove($scope.channel.name);	
+		}
 	}
 
 	$scope.isActive = function (view) {
