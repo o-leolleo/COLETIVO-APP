@@ -13,7 +13,7 @@ angular.module('starter.controllers')
 	$scope.chats  = Voting.all();
 
 	$scope.remove = function (channel) {
-		$scope.mqtt_client.unsubscribe(votacao);
+		$scope.mqtt_client.unsubscribe(channel);
 		Voting.remove(channel);
 	}
 

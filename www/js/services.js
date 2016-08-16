@@ -35,12 +35,11 @@ angular.module('starter.services', [])
 
 			for (var i = 0; i < channels.length; ++i) {
 				if (channels[i].name === votacao) {
+					console.log(channels[i].name);
 					channels.splice(i, 1);
 					console.log("unsubscribe in Coletivo_" + votacao);
 					return true;
 				}
-
-				console.log(channels[i].name);
 			}
 				
 			console.log("sem sucesso");
