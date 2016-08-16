@@ -7,16 +7,57 @@
 <ion-view view-title="{{chat.name}}">
   <ion-content class="padding">
     <ion-list>
-			<ion-item class="item-remove-animate item-icon-right" type="item-text-wrap" align="middle">
+
+			<div class="card {{ isActive(1) }}">
+				<div class="item item-divider">
+					Inscrito em {{ chat.name }}
+				</div>
+
+				<div class="item item-text-wrap">
+					A votação ainda não começou (ou é inativa)... Aguarde
+				</div>
+			</div>
+
+			<ion-item class="item-remove-animate item-icon-right {{ isActive(2) }}" type="item-text-wrap" align="middle">
 				{{ chat.schedule }}	
 			</ion-item>
 
-			<ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="option in chat.options" type="item-text-wrap">
+			<ion-item class="item-remove-animate item-avatar item-icon-right {{ isActive(2) }}"  ng-repeat="option in chat.options" type="item-text-wrap">
 				<button class="button button-block button-positive" ng-click="showConfirm(option)">
 					{{ option }}
 				</button>	
       </ion-item>
 
+			<div class="card {{ isActive(3) }}">
+				<div class="item item-divider">
+					{{ chat.schedule }}
+				</div>
+
+				<div class="item item-text-wrap">
+					<div class="list list-inset">
+						<div class="item">
+							Votação em andamento	
+						</div>
+
+						<div class="item">
+							{{ vote }}	
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="card {{ isActive(4) }}">
+				<div class="item item-divider">
+					Resultado 
+				</div>
+				<div class="item item-text-wrap">
+					<canvas id="doughnut" class="chart chart-doughnut" chart-data="data" chart-labels="labels"></canvas>
+        </div>
+			</div>
+
+			<button class="button button-block button-positive {{ isActive(4) }}" ng-click="end()" ui-sref="tab.chats">
+				Sair
+			</button>
     </ion-list>
   </ion-content>
 </ion-view>

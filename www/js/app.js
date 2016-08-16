@@ -56,11 +56,16 @@ angular.module('starter', ['ionic', 'chart.js', 'starter.controllers', 'starter.
 		if (message[0] === "v") {
 			if (message[1] === "opt") {
 				console.log(message[2]);
+
 				if (Voting.get(message[2]) !== null && Voting.get(message[2]).state === "waiting") {
 								  /* votacao,    options, description*/
 					Voting.addOptions(message[2], message[3], message[4]);
 					Voting.nextState(message[2]); // state = "voting"
 				}
+			} else if (message[1] === "end") {
+								  /* votacao,    labels,      data */
+				Voting.addResults(message[2], message[3], message[4]);			
+				Voting.nextState(message[2]);
 			}
 		} else if (message[0] === "p") {
 			if (message[1] === "new_v") {

@@ -49,6 +49,7 @@ angular.module('starter.controllers')
 						 message.destinationName = "/Coletivo_" + res;
 						 $scope.mqtt_client.send(message);
 						 
+						 // vai para waiting
 						 Voting.nextState(res);
 
                      	 return $scope.data.code;
@@ -70,6 +71,7 @@ angular.module('starter.controllers')
 			$scope.mqtt_client.send(message);	
 
 			Voting.nextState($scope.chat.name); // state = "voted"
+			$scope.vote = option // salva o voto
 
 			console.log("votou!");
 		}
@@ -85,5 +87,25 @@ angular.module('starter.controllers')
 		 if(res)
 			 $scope.vote(option);
 	   });
-	 };
+	}
+
+	$scope.end = function() {
+		if ($scope.chat.state === "finished")
+			Voting.remove($scope.chat.name);
+	}
+
+	$scope.isActive = function(view) {
+		// abaixo, um belo exemplo de gambiarra
+		if ($scope.chat.state === "finished") {
+			$scope.labels = $scope.chat.result.labels;
+			$scope.data   = $scope.chat.result.data;
+		}
+
+		switch (view) {
+			case 1: return ($scope.chat.state === "waiting" || $scope.chat.state === "subscribed") ? "ng-show" : "ng-hide";
+			case 2: return ($scope.chat.state === "voting")   ? "ng-show" : "ng-hide";
+			case 3: return ($scope.chat.state === "voted")    ? "ng-show" : "ng-hide";
+			case 4: return ($scope.chat.state === "finished") ? "ng-show" : "ng-hide";
+		}
+	}
 });

@@ -77,11 +77,6 @@ angular.module('starter.controllers')
 
 	   	} else if ($scope.channel.state === "started") {
 
-		//	message = new Paho.MQTT.Message("v:del:" + $scope.channel.name);
-		//	message.destinationName = "/Coletivo_" + $scope.channel.name;
-		//	$scope.mqtt_client.send(message);
-		//	$scope.mqtt_client.unsubscribe("/Coletivo_" +$scope.channel.name);
-			
 			// vai para finished (onde podem ser vistos os resultados)
 			Owned.nextState($scope.channel.name);
 			console.log($scope.channel.name + " goes to state:" + $scope.channel.state);
@@ -93,6 +88,19 @@ angular.module('starter.controllers')
 				$scope.labels.push(key);
 				$scope.data.push($scope.channel.options[key]);
 			}
+
+			message = new Paho.MQTT.Message(
+				"v:end:" + 
+				$scope.channel.name + ":" +
+				$scope.labels.join("#") + ":" + 
+				$scope.data.join("#")
+			);
+
+			// console.log(message.payloadString);
+			
+			// envia resultados da votação
+			message.destinationName = "/Coletivo_" + $scope.channel.name;
+			$scope.mqtt_client.send(message);
 
 			console.log($scope.labels);
 			console.log($scope.data);

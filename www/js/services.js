@@ -14,7 +14,12 @@ angular.module('starter.services', [])
 				name: name,
 				state: "subscribed",
 				options: [],
-				schedule: ""
+				schedule: "",
+
+				result: {
+					labels: [],
+					data:   []
+				}
 			});
 		},
 
@@ -28,6 +33,15 @@ angular.module('starter.services', [])
 				} 
 
 			return false;
+		},
+
+		addResults: function(votacao, labels, data) {
+			var current = this.get(votacao);	
+
+			current.result.labels = labels.split("#"); 
+			current.result.data   = data.split("#");
+
+			console.log("results added to " + current.name); 
 		},
 
 		remove: function(votacao) {
