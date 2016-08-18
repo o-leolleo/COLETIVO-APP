@@ -1,54 +1,7 @@
 angular.module('starter.controllers')
 
 .controller('AccountCtrl', function($scope, $ionicPopup, Owned) {
-
-    $scope.code = [];
-    $scope.data = [];
 	$scope.channels = Owned.all();
-	
-   // When button is clicked, the popup will be shown...
-   $scope.showPopup = function() {
-      
-      // Custom popup
-      var myPopup = $ionicPopup.show({
-         template:  'Ambiente:'+
-                    '<input type = "text" name="code" ng-model = "data.code">'+
-                    'Pergunta:'+
-                    '<input type = "text" name="desc" ng-model = "data.desc">'+
-		  			'Opções:<br>'+
-                    '1:<input type = "text" name="desc" ng-model = "data.opt1">'+
-                    '2:<input type = "text" name="desc" ng-model = "data.opt2">'+
-                    '3:<input type = "text" name="desc" ng-model = "data.opt3">',
-         title: 'Topico',
-         subTitle: 'Digite o nome do ambiente:',
-         scope: $scope,
-			
-         buttons: [
-            { text: 'Cancelar' }, {
-               text: '<b>Criar</b>',
-               type: 'button-positive',
-                  onTap: function(e) {
-						
-                     if (!$scope.data.code || !$scope.data.desc) {
-                        //don't allow the user to close unless he enters model...
-                           e.preventDefault();
-                     } else {
-						var res = $scope.data;
-
-                        console.log("/Coletivo_" + res.code);
-                        $scope.mqtt_client.subscribe("/Coletivo_" + res.code);
-						
-						// cria canal, seta opções e descrição
-						Owned.add(res.code);
-						Owned.addOptions(res.code, res.opt1+"#"+res.opt2+"#"+res.opt3, res.desc);
-
-                        return $scope.data.code;
-                     }
-                  }
-            }
-         ]
-      });
-   };
 })
 
 .controller('AccountDetailCtrl', function($scope, $stateParams, $ionicPopup, Owned) {
@@ -116,5 +69,45 @@ angular.module('starter.controllers')
 			case 2: return ($scope.channel.state ===  "started") ? "ng-show" : "ng-hide";
 			case 3: return ($scope.channel.state === "finished") ? "ng-show" : "ng-hide";
 		}
+	}
+})
+
+.controller('AccountFormCtrl', function($scope, Owned) {
+	$scope.options_names = [ "Ambiente", "Pergunta", "Opção 1", "Opção 2" ];
+	$scope.options       = { "Ambiente":"", "Pergunta": "", "Opção 1":"", "Opção 2":""};
+
+	$scope.addOption = function() {
+		var num_opt = $scope.options_names.length - 1;
+
+		$scope.options_names.push("Opções " + num_opt); 
+		$scope.options["Opções " + num_opt] = "";	
+	}
+
+	$scope.removeOption = function() {
+		var num_opt = $scope.options_names.length - 2;
+
+		if (num_opt >= 3) {
+			delete $scope.options["Opções " + num_opt];
+			$scope.options_names.pop();
+		}
+	}
+
+	$scope.setChannel = function() {
+		var ambiente = $scope.options["Ambiente"],
+		    pergunta = $scope.options["Pergunta"],
+			options  = [];
+
+		for (var key in $scope.options)
+			if (key !== "Ambiente" && key !== "Pergunta")
+				options.push($scope.options[key]);
+
+		if (ambiente !== "" && pergunta !== "") {
+			console.log("/Coletivo_" + ambiente);
+			$scope.mqtt_client.subscribe("/Coletivo_" + ambiente);
+		}
+		
+		// cria canal, seta opções e descrição
+		Owned.add(ambiente);
+		Owned.addOptions(ambiente, options.join("#"), pergunta);
 	}
 });

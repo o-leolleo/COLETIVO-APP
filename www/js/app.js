@@ -160,6 +160,17 @@ angular.module('starter', ['ionic', 'chart.js', 'starter.controllers', 'starter.
       }
     }
   })
+
+  .state('tab.account-form', {
+	url: '/account/form',
+	views: {
+		'tab-account': {
+			templateUrl: 'templates/account-form.html',
+			controller: 'AccountFormCtrl'
+		}
+	}
+  })
+
   .state('tab.account-detail', {
 	url: '/account/:accountId',
   	views: {

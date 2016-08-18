@@ -1,11 +1,11 @@
 <ion-view view-title="Ambientes">
   <ion-content>
-  <button class = "button button-block button-positive" ng-click = "showPopup()">Criar Pergunta</button>
+  <button class = "button button-block button-positive" ui-sref="tab.account-form">Criar Pergunta</button>
   <ion-list>
-				<ion-item class="item-remove-animate item-icon-right" ng-repeat="item in channels" align="middle" type="item-text-wrap" href="#/tab/account/{{item.name}}">
-            Votação: {{item.name}}
-            </ion-option-button>
-        </ion-item>
+			<ion-item class="item-remove-animate item-icon-right" ng-repeat="item in channels" align="middle" type="item-text-wrap" href="#/tab/account/{{item.name}}">
+					Votação: {{item.name}}
+					</ion-option-button>
+			</ion-item>
     </ion-list>
   </ion-content>
 </ion-view>

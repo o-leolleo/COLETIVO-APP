@@ -1,0 +1,21 @@
+<ion-view view-title="Novo Ambiente">
+  <ion-content>
+		<div class="list">
+				<label class="item item-input" ng-repeat="opt in options_names">
+					<input ng-model="options[opt]" type="text" placeholder="{{ opt }}">
+				</label>
+		</div>
+
+		<div class="button-bar">
+			<a class="button button-assertive" ng-click="removeOption()">remover</a>
+			<a class="button button-balanced" ng-click="addOption()">adicionar</a>
+		</div>
+
+		<p></p>
+
+		<div class="button-bar">
+			<a class="button button-positive" ui-sref="tab.account">cancelar</a>
+			<a class="button button-positive" ng-click="setChannel()" ui-sref="tab.account">confirmar</a>
+		</div>
+  </ion-content>
+</ion-view>
