@@ -2,6 +2,42 @@ angular.module('starter.controllers')
 
 .controller('AccountCtrl', function($scope, $ionicPopup, Owned) {
 	$scope.channels = Owned.all();
+
+	$scope.showPopup = function() {
+		$scope.data = {};
+
+		var myPopup = $ionicPopup.show({
+			template: '<input type="text" ng-model="data.ambiente">',
+    		title: 'Digite o nome do ambiente',
+			scope: $scope,
+
+			buttons: [
+			  { text: 'Cancel' },
+			  {
+				text: '<b>Confirma</b>',
+				type: 'button-positive',
+
+				onTap: function(e) {
+				  if (!$scope.data.ambiente) {
+					//don't allow the user to close unless he enters wifi password
+					e.preventDefault();
+				  } else {
+					return $scope.data.ambiente;
+				  }
+				}
+			  }
+			]
+		});
+
+		myPopup.then(function(res) {
+			Owned.add(res);
+		});
+	}
+
+	$scope.getRoute = function(channel) {
+		if (channel.state === "born") return "#/tab/account/form/" + channel.name;
+		else return "#/tab/account/" + channel.name;
+	}
 })
 
 .controller('AccountDetailCtrl', function($scope, $stateParams, $ionicPopup, Owned) {
@@ -59,7 +95,7 @@ angular.module('starter.controllers')
 			console.log($scope.data);
 			//$scope.$ionicGoBack();
 		} else if ($scope.channel.state === "finished") {
-			Owned.remove($scope.channel.name);	
+			Owned.nextState($scope.channel.name);	
 		}
 	}
 
@@ -72,19 +108,21 @@ angular.module('starter.controllers')
 	}
 })
 
-.controller('AccountFormCtrl', function($scope, Owned) {
-	$scope.options_names = [ "Ambiente", "Pergunta", "Opção 1", "Opção 2" ];
-	$scope.options       = { "Ambiente":"", "Pergunta": "", "Opção 1":"", "Opção 2":""};
+.controller('AccountFormCtrl', function($scope, $stateParams, Owned) {
+	$scope.ambiente = Owned.get($stateParams.accountId).name;
+
+	$scope.options_names = [ "Pergunta", "Opção 1", "Opção 2" ];
+	$scope.options       = { "Pergunta": "", "Opção 1":"", "Opção 2":""};
 
 	$scope.addOption = function() {
-		var num_opt = $scope.options_names.length - 1;
+		var num_opt = $scope.options_names.length;
 
 		$scope.options_names.push("Opções " + num_opt); 
 		$scope.options["Opções " + num_opt] = "";	
 	}
 
 	$scope.removeOption = function() {
-		var num_opt = $scope.options_names.length - 2;
+		var num_opt = $scope.options_names.length - 1;
 
 		if (num_opt >= 3) {
 			delete $scope.options["Opções " + num_opt];
@@ -93,7 +131,7 @@ angular.module('starter.controllers')
 	}
 
 	$scope.setChannel = function() {
-		var ambiente = $scope.options["Ambiente"],
+		var ambiente = $scope.ambiente;
 		    pergunta = $scope.options["Pergunta"],
 			options  = [];
 
@@ -107,7 +145,7 @@ angular.module('starter.controllers')
 		}
 		
 		// cria canal, seta opções e descrição
-		Owned.add(ambiente);
 		Owned.addOptions(ambiente, options.join("#"), pergunta);
+		Owned.nextState(ambiente);
 	}
 });

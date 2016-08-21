@@ -77,7 +77,15 @@ angular.module('starter.services', [])
 			case    "waiting": toEval.state =  "voting"; break;
 			case     "voting": toEval.state =   "voted"; break;
 			case      "voted": toEval.state ="finished"; break;
-			case   "finished": toEval.state = "waiting"; break;
+			case   "finished": {
+					toEval.options  = [];
+					toEval.schedule = "";
+					toEval.result   = {
+						labels: [],
+						data:   []
+					}
+					toEval.state = "waiting";
+				}break;
 			}
 		}
 	};
@@ -96,7 +104,7 @@ angular.module('starter.services', [])
 				name: name,
 				options: {},
 				schedule: "",
-				state: "created"
+				state: "born"
 			});
 		},
 
@@ -145,8 +153,14 @@ angular.module('starter.services', [])
 			var toEval = this.get(channel);
 
 			switch (toEval.state) {
-			case "created": toEval.state =  "started"; break;
-			case "started": toEval.state = "finished"; break;
+			case  "born"   : toEval.state =  "created"; break;
+			case  "created": toEval.state =  "started"; break;
+			case  "started": toEval.state = "finished"; break;
+			case "finished": {
+					toEval.options  = {};
+					toEval.schedule = "";
+					toEval.state = "born";
+				} break;
 			}
 		}
 	};
