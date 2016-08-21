@@ -123,6 +123,7 @@ angular.module('starter', ['ionic', 'chart.js', 'starter.controllers', 'starter.
       }
     }
   })
+
   .state('tab.dash-detail', {
       url: '/dash/:dashId',
       views: {
@@ -132,6 +133,7 @@ angular.module('starter', ['ionic', 'chart.js', 'starter.controllers', 'starter.
         }
       }
     })
+  
   .state('tab.chats', {
       url: '/chats',
       views: {
@@ -141,6 +143,7 @@ angular.module('starter', ['ionic', 'chart.js', 'starter.controllers', 'starter.
         }
       }
     })
+
     .state('tab.chat-detail', {
       url: '/chats/:chatId',
       views: {

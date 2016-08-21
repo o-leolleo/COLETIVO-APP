@@ -91,7 +91,7 @@ angular.module('starter.controllers')
 
 	$scope.end = function() {
 		if ($scope.chat.state === "finished")
-			Voting.remove($scope.chat.name);
+			Voting.nextState($scope.chat.name);
 	}
 
 	$scope.isActive = function(view) {
