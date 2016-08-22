@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'chart.js', 'starter.controllers', 'starter.services'])
 
-.run(function($ionicPlatform, $rootScope, Voting, Owned) {
+.run(function($ionicPlatform, $rootScope, $state, $window, Voting, Owned) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -38,7 +38,7 @@ angular.module('starter', ['ionic', 'chart.js', 'starter.controllers', 'starter.
     function onConnect() {
         // Once a connection has been made, make a subscription and send a message.
         console.log("onConnect");
-        $rootScope.mqtt_client.subscribe("/Coletivo");
+       // $rootScope.mqtt_client.subscribe("/Coletivo");
     }
 
     // called when the client loses its connection
@@ -57,15 +57,21 @@ angular.module('starter', ['ionic', 'chart.js', 'starter.controllers', 'starter.
 			if (message[1] === "opt") {
 				console.log(message[2]);
 
-				if (Voting.get(message[2]) !== null && Voting.get(message[2]).state === "waiting") {
+				if (Voting.get(message[2]) !== null && Voting.get(message[2]).state === "created") {
 								  /* votacao,    options, description*/
 					Voting.addOptions(message[2], message[3], message[4]);
 					Voting.nextState(message[2]); // state = "voting"
+					$state.go($state.current, {}, {reload: true});
 				}
-			} else if (message[1] === "end") {
+			} else if (message[1] === "end" && Voting.get(message[2]) !== null) {
 								  /* votacao,    labels,      data */
 				Voting.addResults(message[2], message[3], message[4]);			
 				Voting.nextState(message[2]);
+
+				if (Voting.get(message[2]).state === "voted")
+					Voting.nextState(message[2]);
+
+				$state.go($state.current, {}, {reload: true});
 			}
 		} else if (message[0] === "p") {
 			if (message[1] === "new_v") {
@@ -85,13 +91,17 @@ angular.module('starter', ['ionic', 'chart.js', 'starter.controllers', 'starter.
 					message = new Paho.MQTT.Message("v:opt:" + channel.name + ":" + options + ":" +  channel.schedule);
 					console.log(message.payloadString);
 					message.destinationName = "/Coletivo_" + channel.name;
+
 					$rootScope.mqtt_client.send(message);
+					$state.go($state.current, {}, {reload: true});
 				}
 			} else if (message[1] === "vote") {
 				var channel = Owned.get(message[2]);
 
-				if (channel.state === "started")
+				if (channel !== null && channel.state === "started") {
 					channel.options[message[3]]++;			
+					$state.go($state.current, {}, {reload: true});
+				}
 			}
 		}
     }

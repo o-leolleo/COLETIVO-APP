@@ -17,6 +17,13 @@ angular.module('starter.controllers')
 		Voting.remove(channel);
 	}
 
+	$scope.showAlert = function() {
+		var alertPopup = $ionicPopup.alert({
+			title: "ERRO",
+			template: 'Já se inscreveu nesse ambiente'
+	   	});
+	}
+
    $scope.showPopup = function() {
       
       // Custom popup
@@ -41,7 +48,11 @@ angular.module('starter.controllers')
 						 // se inscreve na votação
 						 console.log("/Coletivo_"+res);
 						 $scope.mqtt_client.subscribe("/Coletivo_"+res);
-						 Voting.add(res);
+
+						 if (!Voting.add(res)) {
+						     $scope.showAlert();	
+							 return null;
+						 }
 
 						 // avisa ao juiz 
 						 message = new Paho.MQTT.Message("p:new_v:" + res);
@@ -90,8 +101,16 @@ angular.module('starter.controllers')
 	}
 
 	$scope.end = function() {
-		if ($scope.chat.state === "finished")
-			Voting.nextState($scope.chat.name);
+		if ($scope.chat.state === "finished") {
+			Voting.nextState($scope.chat.name); // vai para created
+
+			 // avisa ao juiz 
+			 message = new Paho.MQTT.Message("p:new_v:" + $scope.chat.name);
+			 console.log(message.payloadString);
+			 message.destinationName = "/Coletivo_" + $scope.chat.name;
+			 $scope.mqtt_client.send(message);
+			 Voting.nextState($scope.chat.name);
+		}
 	}
 
 	$scope.isActive = function(view) {

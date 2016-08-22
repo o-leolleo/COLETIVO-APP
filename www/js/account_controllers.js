@@ -30,7 +30,8 @@ angular.module('starter.controllers')
 		});
 
 		myPopup.then(function(res) {
-			Owned.add(res);
+			if (res)
+				Owned.add(res);
 		});
 	}
 
@@ -108,7 +109,7 @@ angular.module('starter.controllers')
 	}
 })
 
-.controller('AccountFormCtrl', function($scope, $stateParams, Owned) {
+.controller('AccountFormCtrl', function($scope, $stateParams, $ionicPopup, $state, Owned) {
 	$scope.ambiente = Owned.get($stateParams.accountId).name;
 
 	$scope.options_names = [ "Pergunta", "Opção 1", "Opção 2" ];
@@ -130,14 +131,37 @@ angular.module('starter.controllers')
 		}
 	}
 
+	hasRepeatOpt = function(options) {
+		for (var i = 0; i < options.length; ++i) 
+			for (var j = i + 1; j < options.length; ++j)	
+				if (options[i] === options[j])
+					return true;
+
+		return false;
+	}
+
+	$scope.showAlert = function() {
+		var alertPopup = $ionicPopup.alert({
+			title: "ERRO",
+			template: 'opções repetidas'
+	   	});
+	}
+
 	$scope.setChannel = function() {
 		var ambiente = $scope.ambiente;
 		    pergunta = $scope.options["Pergunta"],
 			options  = [];
 
+		$scope.submitted = true;
+
 		for (var key in $scope.options)
-			if (key !== "Ambiente" && key !== "Pergunta")
+			if (key !== "Pergunta")
 				options.push($scope.options[key]);
+
+		if (hasRepeatOpt(options)) {
+			$scope.showAlert();
+			return;
+		}
 
 		if (ambiente !== "" && pergunta !== "") {
 			console.log("/Coletivo_" + ambiente);
@@ -147,5 +171,6 @@ angular.module('starter.controllers')
 		// cria canal, seta opções e descrição
 		Owned.addOptions(ambiente, options.join("#"), pergunta);
 		Owned.nextState(ambiente);
+		$state.go("tab.account");
 	}
 });

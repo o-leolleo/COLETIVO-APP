@@ -10,6 +10,9 @@ angular.module('starter.services', [])
 		}, 
 
 		add: function(name) {
+			if (this.get(name) !== null) 
+				return false;
+
 			channels.push({
 				name: name,
 				state: "subscribed",
@@ -21,6 +24,8 @@ angular.module('starter.services', [])
 					data:   []
 				}
 			});
+
+			return true;
 		},
 
 		addOptions: function(votacao, options, desc) {

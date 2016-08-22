@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.coletivo191222" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ionicframework.yourpackagename" 
+version="0.0.1" 
+xmlns="http://www.w3.org/ns/widgets" 
+xmlns:cdv="http://cordova.apache.org/ns/1.0"
+xmlns:gap="http://phonegap.com/ns/1.0">
+
   <name>coletivo</name>
   <description>
         An Ionic Framework and Cordova project.
@@ -18,7 +23,7 @@
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
   <feature name="StatusBar">
-    <param name="ios-package" value="CDVStatusBar" onload="true"/>
+    <param name="ios-package" onload="true" value="CDVStatusBar"/>
   </feature>
   <platform name="android">
     <icon src="resources/android/icon/drawable-ldpi-icon.png" density="ldpi"/>
@@ -40,4 +45,8 @@
     <splash src="resources/android/splash/drawable-port-xxhdpi-screen.png" density="port-xxhdpi"/>
     <splash src="resources/android/splash/drawable-port-xxxhdpi-screen.png" density="port-xxxhdpi"/>
   </platform>
+  <plugin name="cordova-plugin-console" spec="~1.0.3"/>
+  <plugin name="cordova-plugin-splashscreen" spec="~3.2.2"/>
+  <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
+  <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
 </widget>
