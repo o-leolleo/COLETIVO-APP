@@ -35,6 +35,20 @@ angular.module('starter.controllers')
 		});
 	}
 
+	$scope.showAlert = function() {
+		var alertPopup = $ionicPopup.alert({
+			title: "ERRO",
+			template: 'A votação já começou! Não pode excluir'
+	   	});
+	}
+
+	$scope.remove = function(channel) {
+		if (Owned.get(channel).state === "born" || Owned.get(channel).state === "created")
+			Owned.remove(channel);
+		else
+			$scope.showAlert();
+	}
+
 	$scope.getRoute = function(channel) {
 		if (channel.state === "born") return "#/tab/account/form/" + channel.name;
 		else return "#/tab/account/" + channel.name;

@@ -4,7 +4,10 @@
   <ion-list>
 		<ion-item class="item-remove-animate item-icon-right" ng-repeat="item in channels" align="middle" type="item-text-wrap" href="{{ getRoute(item) }}">
 					Votação: {{item.name}}
-					</ion-option-button>
+
+        <ion-option-button class="button-assertive" ng-click="remove(item.name)">
+          Delete
+        </ion-option-button>
 			</ion-item>
     </ion-list>
   </ion-content>
