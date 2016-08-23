@@ -6,17 +6,15 @@
 -->
 <ion-view view-title="{{chat.name}}">
   <ion-content class="padding">
-    <ion-list>
-			<ion-item class="item-remove-animate item-icon-right" type="item-text-wrap" align="middle">
-				{{ chat.schedule }}	
-			</ion-item>
-
-			<ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="option in chat.options" type="item-text-wrap">
-				<button class="button button-block button-positive" ng-click="showConfirm(option)">
-					{{ option }}
-				</button>	
-      </ion-item>
-
-    </ion-list>
+		<div class="card">
+			<div class="item item-divider">
+			</div>
+			<div class="item item-text-wrap">
+				This is a basic Card with some text.
+			</div>
+			<div class="item item-divider">
+				I'm a Footer in a Card!
+			</div>
+		</div>
   </ion-content>
 </ion-view>

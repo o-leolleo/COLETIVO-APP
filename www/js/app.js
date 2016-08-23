@@ -57,7 +57,7 @@ angular.module('starter', ['ionic', 'chart.js', 'starter.controllers', 'starter.
 			if (message[1] === "opt") {
 				console.log(message[2]);
 
-				if (Voting.get(message[2]) !== null && Voting.get(message[2]).state === "created") {
+				if (Voting.get(message[2]) !== null && Voting.get(message[2]).state === "waiting") {
 								  /* votacao,    options, description*/
 					Voting.addOptions(message[2], message[3], message[4]);
 					Voting.nextState(message[2]); // state = "voting"
